@@ -12,7 +12,11 @@ module.exports = {
       "@app/*": ["src/app/*"]
     }
   */
-    moduleNameMapper: {
-      '^@app/(.*)$': '<rootDir>/src/app/$1',
-    },  
+  moduleNameMapper: {
+    '^@app/(.*)$': '<rootDir>/src/app/$1',
+  },
+  // set the value to the custom resolver created in step 1
+  resolver: '<rootDir>/my-module-resolve.js',
+  // browser bundles in firebase are ESM, transform them to CJS to work in Jest
+  transformIgnorePatterns: ['<rootDir>/node_modules/(?!(@firebase.*)/)'],
 };
