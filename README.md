@@ -1,3 +1,7 @@
+
+Add the Firebase Admin SDK to your server
+https://firebase.google.com/docs/admin/setup?authuser=0
+
 Upgrade to 9.2.0 gives error in jest unit tests
 https://github.com/firebase/firebase-js-sdk/issues/5687
 

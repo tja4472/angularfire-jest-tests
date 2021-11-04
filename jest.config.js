@@ -4,6 +4,8 @@ module.exports = {
   preset: 'jest-preset-angular',
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
   testPathIgnorePatterns: ['<rootDir>/cypress/'],
+  runner: 'groups',
+  testEnvironment: 'node',
   /*
     https://kulshekhar.github.io/ts-jest/docs/getting-started/paths-mapping/
 
