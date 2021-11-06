@@ -1,7 +1,7 @@
 /**
- * @jest-environment jsdom
+ * @jest-environment node
  *
- * @group emulator-required
+ * @group emulator-required/node
  */
 import * as admin from 'firebase-admin';
 
@@ -13,7 +13,7 @@ import {
   SaveFunction,
 } from '../emulator/importDatabase';
 
-describe.skip('firebase-admin using jsdom', () => {
+describe('firebase-admin firestore using node', () => {
   beforeAll(() => {
     // The Firebase Admin SDK automatically connects to the Authentication emulator when the FIREBASE_AUTH_EMULATOR_HOST environment variable is set.
     // https://firebase.google.com/docs/emulator-suite/connect_auth
@@ -36,17 +36,7 @@ describe.skip('firebase-admin using jsdom', () => {
     // app.delete().catch(() => undefined);
   });
 
-  it('auth - CreateUser', async () => {
-    const userRecord = await admin.auth().createUser({
-      uid: 'uid1',
-      email: 'test@test.example',
-      password: 'password',
-    });
-
-    expect(userRecord.uid).toEqual('uid1');
-  });
-
-  it('firestore - Add item to collection using collection:add', async () => {
+  it('Add item to collection using collection:add', async () => {
     interface Item {
       name: string;
       price: number;
@@ -62,7 +52,7 @@ describe.skip('firebase-admin using jsdom', () => {
     expect(actualDoc.data()).toEqual(expectedDoc);
   });
 
-  it('firestore - Add item to collection using doc:create', async () => {
+  it('Add item to collection using doc:create', async () => {
     interface Item {
       name: string;
       price: number;
@@ -79,7 +69,7 @@ describe.skip('firebase-admin using jsdom', () => {
     expect(actualDoc.data()).toEqual(expectedDoc);
   });
 
-  it('firestore - (documentPath) Add item to collection using doc:create', async () => {
+  it('(documentPath) Add item to collection using doc:create', async () => {
     interface Item {
       name: string;
       price: number;
@@ -99,7 +89,7 @@ describe.skip('firebase-admin using jsdom', () => {
   });
 
   it(
-    'firestore - Add data to database using importDatabase',
+    'Add data to database using importDatabase',
     async () => {
       // #region Database
       type DocumentA = {

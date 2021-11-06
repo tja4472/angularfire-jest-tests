@@ -1,6 +1,11 @@
-
 Add the Firebase Admin SDK to your server
 https://firebase.google.com/docs/admin/setup?authuser=0
+
+Connect your app to the Authentication Emulator
+https://firebase.google.com/docs/emulator-suite/connect_auth?authuser=0
+
+Get Started with Firebase Authentication on Websites
+https://firebase.google.com/docs/auth/web/start?authuser=0
 
 Upgrade to 9.2.0 gives error in jest unit tests
 https://github.com/firebase/firebase-js-sdk/issues/5687
