@@ -47,7 +47,7 @@ const COMMON_CONFIG = {
   measurementId: 'G-W20QDV5CZP',
 };
 
-describe('Firestore', () => {
+describe.skip('Firestore', () => {
   let app: FirebaseApp;
   let firestore: Firestore;
   let providedFirestore: Firestore;
