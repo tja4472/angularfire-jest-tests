@@ -66,15 +66,16 @@ describe('Firestore', () => {
     beforeEach(() => {
       appName = rando();
       TestBed.configureTestingModule({
-        imports: [
-          provideFirebaseApp(() => initializeApp(COMMON_CONFIG, appName)),
-          provideFirestore(() => {
+    imports: [
+        provideFirebaseApp(() => initializeApp(COMMON_CONFIG, appName)),
+        provideFirestore(() => {
             providedFirestore = getFirestore(getApp(appName));
             connectFirestoreEmulator(providedFirestore, 'localhost', 8080);
             return providedFirestore;
-          }),
-        ],
-      });
+        }),
+    ],
+    teardown: { destroyAfterEach: false }
+});
       app = TestBed.inject(FirebaseApp);
       firestore = TestBed.inject(Firestore);
     });
