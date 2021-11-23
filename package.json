@@ -8,7 +8,7 @@
     "start": "ng serve",
     "-- test ---": "",
     "test": "jest --runInBand",
-    "test:verbose": "jest --verbose",
+    "test:verbose": "jest --runInBand --verbose",
     "test:all-emulator": "jest --runInBand --group=emulator-required",
     "test:all-emulator:jsdom": "jest --runInBand --group=emulator-required/jsdom",
     "test:all-emulator:node": "jest --runInBand --group=emulator-required/node",
