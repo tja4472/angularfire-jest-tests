@@ -95,126 +95,133 @@ describe('firebase-admin', () => {
     expect(actualDoc.data()).toEqual(expectedDoc);
   });
 
-  it('firestore - Add data to database using importDatabase', async () => {
-    // #region Database
-    type DocumentA = {
-      doc_A_field1: string;
-      doc_A_field2: number;
-      __doc_A_collectionC: Collection<DocumentC>;
-      __doc_A_collectionD: Collection<DocumentD>;
-    };
+  it(
+    'firestore - Add data to database using importDatabase',
+    async () => {
+      // #region Database
+      type DocumentA = {
+        doc_A_field1: string;
+        doc_A_field2: number;
+        __doc_A_collectionC: Collection<DocumentC>;
+        __doc_A_collectionD: Collection<DocumentD>;
+      };
 
-    type Favorites = {
-      food: string;
-      color: string;
-      subject: string;
-    };
+      type Favorites = {
+        food: string;
+        color: string;
+        subject: string;
+      };
 
-    type DocumentB = {
-      doc_B_field1: string;
-      doc_B_field2: number;
-      favorites: Favorites;
-    };
+      type DocumentB = {
+        doc_B_field1: string;
+        doc_B_field2: number;
+        favorites: Favorites;
+      };
 
-    type DocumentC = {
-      doc_C_field1: string;
-      doc_C_field2: number;
-    };
+      type DocumentC = {
+        doc_C_field1: string;
+        doc_C_field2: number;
+      };
 
-    type DocumentD = {
-      doc_D_field1: string;
-      doc_D_field2: number;
-    };
+      type DocumentD = {
+        doc_D_field1: string;
+        doc_D_field2: number;
+      };
 
-    type Database = {
-      __collectionA: Collection<DocumentA>;
-      __collectionB: Collection<DocumentB>;
-    };
+      type Database = {
+        __collectionA: Collection<DocumentA>;
+        __collectionB: Collection<DocumentB>;
+      };
 
-    const Database: Database = {
-      // Collections prefixed by '__'.
-      __collectionA: {
-        documentA1: {
-          doc_A_field1: 'field1-A1',
-          doc_A_field2: 2,
-          __doc_A_collectionC: {
-            documentC1: {
-              doc_C_field1: 'docC_field1-C1',
-              doc_C_field2: 6,
+      const Database: Database = {
+        // Collections prefixed by '__'.
+        __collectionA: {
+          documentA1: {
+            doc_A_field1: 'field1-A1',
+            doc_A_field2: 2,
+            __doc_A_collectionC: {
+              documentC1: {
+                doc_C_field1: 'docC_field1-C1',
+                doc_C_field2: 6,
+              },
+              documentC2: {
+                doc_C_field1: 'docC_field1-C2',
+                doc_C_field2: 6,
+              },
             },
-            documentC2: {
-              doc_C_field1: 'docC_field1-C2',
-              doc_C_field2: 6,
+            __doc_A_collectionD: {
+              documentD1: {
+                doc_D_field1: 'docD_field1-D1',
+                doc_D_field2: 6,
+              },
             },
           },
-          __doc_A_collectionD: {
-            documentD1: {
-              doc_D_field1: 'docD_field1-D1',
-              doc_D_field2: 6,
+          documentA2: {
+            doc_A_field1: 'field1-A2',
+            doc_A_field2: 2,
+            __doc_A_collectionC: {},
+            __doc_A_collectionD: {},
+          },
+          documentA3: {
+            doc_A_field1: 'field1-A3',
+            doc_A_field2: 2,
+            __doc_A_collectionC: {},
+            __doc_A_collectionD: {},
+          },
+        },
+        __collectionB: {
+          documentB1: {
+            doc_B_field1: 'field1-B1',
+            doc_B_field2: 2,
+            favorites: {
+              food: 'Pizza',
+              color: 'Blue',
+              subject: 'Recess',
             },
           },
         },
-        documentA2: {
-          doc_A_field1: 'field1-A2',
-          doc_A_field2: 2,
-          __doc_A_collectionC: {},
-          __doc_A_collectionD: {},
+      };
+      // #endregion
+
+      const saveFunction: SaveFunction = async (
+        documentPath: string,
+        documentFields: NonNullable<Record<string, unknown>>
+      ) => {
+        const doc = await admin
+          .firestore()
+          .doc(documentPath)
+          .create(documentFields);
+      };
+
+      await importDatabase(Database, saveFunction);
+
+      const collectionB = admin.firestore().collection('collectionB');
+      const doc1 = await collectionB.doc('documentB1').get();
+
+      const expected1: DocumentB = {
+        doc_B_field1: 'field1-B1',
+        doc_B_field2: 2,
+        favorites: {
+          food: 'Pizza',
+          color: 'Blue',
+          subject: 'Recess',
         },
-        documentA3: {
-          doc_A_field1: 'field1-A3',
-          doc_A_field2: 2,
-          __doc_A_collectionC: {},
-          __doc_A_collectionD: {},
-        },
-      },
-      __collectionB: {
-        documentB1: {
-          doc_B_field1: 'field1-B1',
-          doc_B_field2: 2,
-          favorites: {
-            food: 'Pizza',
-            color: 'Blue',
-            subject: 'Recess',
-          },
-        },
-      },
-    };
-    // #endregion
+      };
 
-    const saveFunction: SaveFunction = async (
-      documentPath: string,
-      documentFields: NonNullable<Record<string, unknown>>
-    ) => {
-      const doc = await admin.firestore().doc(documentPath).create(documentFields);    
-    };
+      expect(doc1.data()).toEqual(expected1);
 
-    await importDatabase(Database, saveFunction);
+      const doc2 = await admin
+        .firestore()
+        .doc('/collectionA/documentA1/doc_A_collectionD/documentD1')
+        .get();
 
-    const collectionB = admin.firestore().collection('collectionB');
-    const doc1 = await collectionB.doc('documentB1').get();
+      const expected2: DocumentD = {
+        doc_D_field1: 'docD_field1-D1',
+        doc_D_field2: 6,
+      };
 
-    const expected1: DocumentB = {
-      doc_B_field1: 'field1-B1',
-      doc_B_field2: 2,
-      favorites: {
-        food: 'Pizza',
-        color: 'Blue',
-        subject: 'Recess',
-      },
-    };
-
-    expect(doc1.data()).toEqual(expected1);
-
-    const doc2 = await admin
-      .firestore()
-      .doc('/collectionA/documentA1/doc_A_collectionD/documentD1')
-      .get();
-
-    const expected2: DocumentD = {
-      doc_D_field1: 'docD_field1-D1',
-      doc_D_field2: 6,
-    };
-
-    expect(doc2.data()).toEqual(expected2);
-  }, 10 * 1000);
+      expect(doc2.data()).toEqual(expected2);
+    },
+    10 * 1000
+  );
 });

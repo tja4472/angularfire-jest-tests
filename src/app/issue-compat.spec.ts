@@ -53,12 +53,12 @@ describe.skip('Firestore', () => {
     beforeEach(() => {
       appName = rando();
       TestBed.configureTestingModule({
-    imports: [
-        AngularFireModule.initializeApp(COMMON_CONFIG),
-        AngularFirestoreModule,
-    ],
-    teardown: { destroyAfterEach: false }
-});
+        imports: [
+          AngularFireModule.initializeApp(COMMON_CONFIG),
+          AngularFirestoreModule,
+        ],
+        teardown: { destroyAfterEach: false },
+      });
       app = TestBed.inject(FirebaseApp);
       firestore = TestBed.inject(AngularFirestore);
     });

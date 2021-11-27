@@ -1,6 +1,6 @@
 /**
  * @jest-environment jsdom
- * 
+ *
  * @group emulator-required/jsdom
  */
 import * as admin from 'firebase-admin';
@@ -40,7 +40,7 @@ describe('firebase auth', () => {
 
     admin.initializeApp({ projectId: 'demo-1' });
 
-    const app = initializeApp({apiKey: 'dummy-apiKey', projectId: 'demo-1' });
+    const app = initializeApp({ apiKey: 'dummy-apiKey', projectId: 'demo-1' });
 
     const auth = getAuth(app);
     connectAuthEmulator(auth, EmulatorInfo.auth.useEmulatorUrl);
@@ -51,7 +51,7 @@ describe('firebase auth', () => {
     await clearDatabase('demo-1');
   });
 
-  it('can successfully sign in', async () => { 
+  it('can successfully sign in', async () => {
     const userRecord = await admin.auth().createUser({
       uid: 'uid1',
       email: 'test@test.example',
