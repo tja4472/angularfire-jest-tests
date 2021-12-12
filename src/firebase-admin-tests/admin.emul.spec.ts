@@ -12,6 +12,8 @@ import {
 } from '../emulator/importDatabase';
 
 describe('firebase-admin', () => {
+  var app: admin.app.App;
+
   beforeAll(() => {
     // The Firebase Admin SDK automatically connects to the Authentication emulator when the FIREBASE_AUTH_EMULATOR_HOST environment variable is set.
     // https://firebase.google.com/docs/emulator-suite/connect_auth
@@ -22,7 +24,7 @@ describe('firebase-admin', () => {
     // https://firebase.google.com/docs/emulator-suite/connect_firestore
     process.env['FIRESTORE_EMULATOR_HOST'] = 'localhost:8080';
 
-    admin.initializeApp({ projectId: 'demo-1' });
+    app = admin.initializeApp({ projectId: 'demo-1' });
   });
 
   beforeEach(async () => {
@@ -35,7 +37,11 @@ describe('firebase-admin', () => {
   });
 
   it('auth - CreateUser', async () => {
-    const userRecord = await admin.auth().createUser({
+    /*
+      firebase 9.6.1
+      admin.auth() randomly fails.
+    */
+    const userRecord = await admin.auth(app).createUser({
       uid: 'uid1',
       email: 'test@test.example',
       password: 'password',
