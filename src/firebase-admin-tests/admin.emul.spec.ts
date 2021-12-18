@@ -11,6 +11,9 @@ import {
   SaveFunction,
 } from '../emulator/importDatabase';
 
+jest.retryTimes(3);
+jest.setTimeout(30000);
+
 describe('firebase-admin', () => {
   var app: admin.app.App;
 
@@ -41,6 +44,7 @@ describe('firebase-admin', () => {
       firebase 9.6.1
       admin.auth() randomly fails.
     */
+    //        jest.setTimeout(30000)
     const userRecord = await admin.auth(app).createUser({
       uid: 'uid1',
       email: 'test@test.example',
