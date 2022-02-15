@@ -1,5 +1,4 @@
-import * as http from 'http';
-
+import { request, RequestOptions } from 'http';
 import { EmulatorInfo } from './emulator-info';
 
 /**
@@ -7,7 +6,7 @@ import { EmulatorInfo } from './emulator-info';
  * @see: https://firebase.google.com/docs/emulator-suite/connect_firestore#clear_your_database_between_tests
  */
 export function clearDatabase(projectId: string) {
-  const options: http.RequestOptions = {
+  const options: RequestOptions = {
     host: EmulatorInfo.host,
     path: `/emulator/v1/projects/${projectId}/databases/(default)/documents`,
     method: 'DELETE',
@@ -15,7 +14,7 @@ export function clearDatabase(projectId: string) {
   };
 
   return new Promise<number | undefined>((resolve, reject) => {
-    const req = http.request(options, (res) => {
+    const req = request(options, (res) => {
       const statusCode = res.statusCode;
       res.destroy();
       resolve(statusCode);
@@ -34,7 +33,7 @@ export function clearDatabase(projectId: string) {
  * @see: https://firebase.google.com/docs/reference/rest/auth#section-auth-emulator-clearaccounts
  */
 export function clearUserAccounts(projectId: string) {
-  const options: http.RequestOptions = {
+  const options: RequestOptions = {
     host: EmulatorInfo.host,
     path: `/emulator/v1/projects/${projectId}/accounts`,
     method: 'DELETE',
@@ -42,7 +41,7 @@ export function clearUserAccounts(projectId: string) {
   };
 
   return new Promise<number | undefined>((resolve, reject) => {
-    const req = http.request(options, (res) => {
+    const req = request(options, (res) => {
       const statusCode = res.statusCode;
       res.destroy();
       resolve(statusCode);
