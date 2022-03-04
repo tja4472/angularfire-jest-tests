@@ -19,7 +19,6 @@ import {
   AngularFirestoreCollection,
   DocumentData,
 } from '@angular/fire/compat/firestore';
-import 'firebase/compat/firestore';
 import {
   AngularFireAuth,
   AngularFireAuthModule,
@@ -27,8 +26,10 @@ import {
   USE_EMULATOR as USE_AUTH_EMULATOR,
 } from '@angular/fire/compat/auth';
 
+import firebase from 'firebase/compat/app';
+
 const COMMON_CONFIG = {
-  apiKey: 'AIzaSyBVSy3YpkVGiKXbbxeK0qBnu3-MNZ9UIjA',
+  apiKey: 'dummy-apiKey',
   // authDomain: 'angularfire2-test.firebaseapp.com',
   // databaseURL: 'https://angularfire2-test.firebaseio.com',
   projectId: 'demo-1',
@@ -42,6 +43,19 @@ const COMMON_CONFIG = {
 const emulators = {
   auth: ['http://localhost:9099'],
   firestore: ['localhost', 8080],
+} as const;
+
+const providerSettings: {
+  auth: Readonly<firebase.auth.AuthSettings>;
+  firestore: Readonly<firebase.firestore.Settings>;
+} = {
+  auth: {
+    appVerificationDisabledForTesting: true,
+  },
+  firestore: {
+    experimentalAutoDetectLongPolling: true,
+    merge: true,
+  },
 };
 
 export async function setupEmul(firebaseAppName?: string) {
@@ -58,7 +72,7 @@ export async function setupEmul(firebaseAppName?: string) {
     providers: [
       {
         provide: FIRESTORE_SETTINGS,
-        useValue: { experimentalAutoDetectLongPolling: true },
+        useValue: providerSettings.firestore,
       },
       {
         provide: USE_FIRESTORE_EMULATOR,
@@ -66,14 +80,12 @@ export async function setupEmul(firebaseAppName?: string) {
       },
       {
         provide: AUTH_SETTINGS,
-        useValue: { appVerificationDisabledForTesting: true },
+        useValue: providerSettings.auth,
       },
-      /*      
       {
         provide: USE_AUTH_EMULATOR,
         useValue: emulators.auth,
-      },      
-*/
+      },
     ],
     teardown: { destroyAfterEach: false },
   });
